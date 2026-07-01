@@ -1,0 +1,25 @@
+HW02 - ANSWER.TXT
+
+Task 4.2:
+
+BIKE_MODEL là biến toàn cục có const và có giá trị khởi tạo, nên nằm ở vùng .rodata, thường lưu trong ROM/Flash.
+
+total_odometer là biến toàn cục khởi tạo bằng 0, nên nằm ở vùng .bss. Vùng này được cấp phát trong RAM và tự đưa về 0 khi chương trình bắt đầu.
+
+current_speed là biến cục bộ trong hàm main, nên nằm trên Stack, thuộc RAM.
+
+Task 4.3:
+
+Khi chạy crash_simulation(), hàm đệ quy sẽ gọi liên tục và dùng thêm bộ nhớ Stack ở mỗi lần gọi. Sau một lúc Stack bị tràn, chương trình trên máy tính thường dừng với lỗi Segmentation fault hoặc core dumped.
+
+Nếu chạy trên vi điều khiển ARM Cortex-M, lỗi này thường làm CPU nhảy vào HardFault_Handler. Nếu có bật MPU thì có thể vào MemManage_Handler trước.
+
+Task 5:
+
+Chọn Cách 1:
+
+uint16_t trip_history[20000] = {0};
+
+Vì mảng được khởi tạo toàn 0 nên nằm ở vùng .bss, chỉ tốn RAM khi chạy và không cần lưu toàn bộ 40 KB trong Flash.
+
+Cách 2 có giá trị khác 0 nên thường nằm ở vùng .data. Vùng .data phải lưu dữ liệu khởi tạo trong Flash rồi copy sang RAM lúc khởi động. Do mảng khoảng 40 KB mà Flash chỉ còn 20 KB, cách này dễ bị vượt dung lượng Flash.
