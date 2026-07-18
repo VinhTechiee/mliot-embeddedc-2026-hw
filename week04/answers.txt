@@ -1,0 +1,29 @@
+Thiết kế Task 5: Cách 2 - LED phản hồi được điều khiển bằng firmware tại chân PA8.
+
+TASK 1: BẢN CHẤT CÁC CHẾ ĐỘ GPIO
+
+1.1. Ở chế độ Output Push-Pull, PMOS nằm phía trên và NMOS nằm phía dưới.
+- Khi xuất logic 1: PMOS dẫn, NMOS ngắt nên chân được nối lên VDD, điện áp gần 3.3 V.
+- Khi xuất logic 0: PMOS ngắt, NMOS dẫn nên chân được nối xuống GND, điện áp gần 0 V.
+Hai transistor không được dẫn cùng lúc vì sẽ tạo đường ngắn mạch từ VDD xuống GND.
+
+1.2. Input Pull-up được dùng khi tín hiệu bình thường cần ở mức 1, còn thiết bị ngoài
+(ví dụ nút nhấn) sẽ kéo chân xuống GND khi hoạt động. Điện trở kéo lên giúp chân luôn có
+một mức logic xác định khi nút đang hở. Nếu để Input Floating và không nối vào đâu,
+chân có trở kháng cao nên dễ bắt nhiễu. Giá trị đọc từ thanh ghi IDR có thể thay đổi ngẫu
+nhiên giữa 0 và 1 dù không có tín hiệu thật.
+
+TASK 2: XUNG NHỊP NGOẠI VI
+
+ST tắt clock của phần lớn ngoại vi sau reset để giảm điện năng tiêu thụ. Một dự án thường
+chỉ dùng một phần các ngoại vi có trên chip, vì vậy việc cấp clock theo nhu cầu sẽ tiết kiệm
+năng lượng và tránh các khối không dùng vẫn chuyển mạch.
+
+Nếu chưa bật clock cho một GPIO port thì bus không truyền được thao tác cấu hình tới port
+đó. Các lệnh ghi thanh ghi cấu hình không tạo ra kết quả mong muốn, chân vẫn giữ trạng thái
+sau reset và chương trình đọc/ghi GPIO sẽ không hoạt động đúng. Vì vậy thứ tự phải là bật
+APB2 clock trước, sau đó mới cấu hình và sử dụng chân.
+
+TASK 5: VIDEO DEMO
+
+Link video: https://drive.google.com/drive/u/0/folders/1nTFlI20QC8cYaft_Af46jchSPCDsDPYe
